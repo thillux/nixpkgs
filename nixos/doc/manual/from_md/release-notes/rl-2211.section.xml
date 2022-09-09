@@ -162,6 +162,11 @@
       </listitem>
       <listitem>
         <para>
+          Pantheon has been updated to 7.0.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           OpenSSL now defaults to OpenSSL 3, updated from 1.1.1.
         </para>
       </listitem>
