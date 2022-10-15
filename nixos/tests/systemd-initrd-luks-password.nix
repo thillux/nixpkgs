@@ -19,18 +19,18 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     specialisation.boot-luks.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         # We have two disks and only type one password - key reuse is in place
-        cryptroot.device = "/dev/vdc";
-        cryptroot2.device = "/dev/vdd";
+        cryptroot.device = "/dev/vdb";
+        cryptroot2.device = "/dev/vdc";
       };
-      virtualisation.bootDevice = "/dev/mapper/cryptroot";
+      virtualisation.rootDevice = "/dev/mapper/cryptroot";
     };
   };
 
   testScript = ''
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
+    machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdb -")
     machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdc -")
-    machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdd -")
 
     # Boot from the encrypted disk
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
@@ -43,6 +43,6 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.send_console("supersecret\n")
     machine.wait_for_unit("multi-user.target")
 
-    assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
-  '';
+    assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount"), "/dev/mapper/cryptroot do not appear in mountpoints list"
+    '';
 })
