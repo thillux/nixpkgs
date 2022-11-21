@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     substituteInPlace usr/lib/hypnotix/hypnotix.py \
       --replace __DEB_VERSION__ ${version} \
       --replace /usr/share/hypnotix $out/share/hypnotix
+
+    # Fix launching with mpv 0.35.0
+    # https://github.com/linuxmint/hypnotix/issues/254
+    substituteInPlace usr/lib/hypnotix/mpv.py \
+      --replace mpv_detach_destroy mpv_destroy
   '';
 
   nativeBuildInputs = [
