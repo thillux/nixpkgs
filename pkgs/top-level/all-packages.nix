@@ -328,6 +328,8 @@ with pkgs;
 
   bfscripts = callPackage ../tools/misc/bfscripts { };
 
+  mlxbf-bootimages = callPackage ../misc/mlxbf-bootimages { };
+
   bibtex-tidy = nodePackages.bibtex-tidy;
 
   binbloom = callPackage ../tools/security/binbloom { };
