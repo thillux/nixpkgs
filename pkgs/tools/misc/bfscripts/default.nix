@@ -3,33 +3,13 @@
 , lib
 , efibootmgr
 , dracut
-, bfscripts
-  # , mlxbf-bootctl
 , makeWrapper
 , python3
 }:
 
 let
   binaries = [
-    "bfacpievt"
-    { name = "bfbootmgr"; deps = [ efibootmgr ]; }
-    # "bfcfg"
-    # "bfcpu-freq"
-    { name = "bfdracut"; deps = [ dracut ]; }
-    # "bffamily"
-    # "bfgrubcheck"
-    # "bfhcafw"
-    # "bfinst"
-    # "bfpxe"
-    # "bfrec" # bfrec contains a lot of hardcoded paths
-    "bfrshlog"
-    { name = "bfsbdump"; deps = [ bfscripts ]; }
-    # { name = "bfsbkeys"; deps = [ mlxbf-bootctl ]; }
-    # { name = "bfsbverify"; deps = [ mlxbf-bootctl ]; }
-    # { name = "bfver"; deps = [ mlxbf-bootctl ]; }
-    "bfvcheck"
     "mlx-mkbfb"
-    "bfup"
   ];
 in
 stdenv.mkDerivation rec {
