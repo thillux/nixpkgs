@@ -4,6 +4,7 @@
 , kernel
 , initrd
 , init
+, imgName ? "nixos.bfb"
 }:
 
 stdenv.mkDerivation {
@@ -16,6 +17,8 @@ stdenv.mkDerivation {
 
   buildCommand =
     ''
+      mkdir -p $out
+
       boot_args=$(mktemp)
       boot_args2=$(mktemp)
       boot_path=$(mktemp)
@@ -29,13 +32,13 @@ stdenv.mkDerivation {
       printf "VenHw(F019E406-8C9C-11E5-8797-001ACA00BFC4)/Image" > "$boot_path"
       printf "NixOS bootstream" > "$boot_desc"
 
-      ${bfscripts}/bin/mlx-mkbfb \
+      ${bfscripts}/bin/mlx-mkbfb -v \
         --image "${kernel}" --initramfs "${initrd}" \
         --capsule "${mlxbf-bootimages}/lib/firmware/mellanox/boot/capsule/boot_update2.cap" \
         --boot-args-v0 "$boot_args" \
         --boot-args-v2 "$boot_args2" \
         --boot-path "$boot_path" \
         --boot-desc "$boot_desc" \
-        ${mlxbf-bootimages}/lib/firmware/mellanox/boot/default.bfb ${name}
+        "${mlxbf-bootimages}/lib/firmware/mellanox/boot/default.bfb" $out/${imgName}
     '';
 }
