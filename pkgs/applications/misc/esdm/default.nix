@@ -7,6 +7,11 @@
 , ais2031Support ? true
 , linux-devfiles ? true
 , linux-getrandom ? true
+, es_cpu ? true
+, es_kernel ? true
+, es_irq ? true
+, es_sched ? true
+, es_hwrand ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +38,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Db_lto=false"
   ] ++ lib.lists.optional (!selinuxSupport) "-Dselinux=disabled"
-   ++ lib.lists.optional (!es_jitterRng) "-Des_jent=disabled"
    ++ lib.lists.optionals drng_chacha20 [
     "-Ddrng_hash_drbg=disabled"
     "-Ddrng_chacha20=enabled"
@@ -41,6 +45,11 @@ stdenv.mkDerivation rec {
    ++ lib.lists.optional ais2031Support "-Dais2031=true"
    ++ lib.lists.optional (!linux-devfiles) "-Dlinux-devfiles=disabled"
    ++ lib.lists.optional (!linux-getrandom) "-Dlinux-getrandom=disabled"
+   ++ lib.lists.optional (!es_jitterRng) "-Des_jent=disabled"
+   ++ lib.lists.optional (!es_cpu) "-Des_cpu=disabled"
+   ++ lib.lists.optional (!es_kernel) "-Des_kernel=disabled"
+   ++ lib.lists.optional (!es_sched) "-Des_sched=disabled"
+   ++ lib.lists.optional (!es_hwrand) "-Des_hwrand=disabled"
   ;
 
   meta = with lib; {
