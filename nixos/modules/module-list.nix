@@ -298,7 +298,6 @@
   ./security/sudo.nix
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
-  #./security/esdm.nix
   ./security/wrappers/default.nix
   ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
