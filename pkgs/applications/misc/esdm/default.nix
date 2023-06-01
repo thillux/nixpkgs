@@ -2,11 +2,11 @@
 , git, protobufc, pkgconfig, fuse3, meson, cmake, ninja
 , libselinux, jitterentropy
 , selinuxSupport ? false
-, es_jitterRng ? true
 , drng_chacha20 ? true
 , ais2031Support ? true
 , linux-devfiles ? true
 , linux-getrandom ? true
+, es_jitterRng ? true
 , es_cpu ? true
 , es_kernel ? true
 , es_irq ? true
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
    ++ lib.lists.optional (!es_jitterRng) "-Des_jent=disabled"
    ++ lib.lists.optional (!es_cpu) "-Des_cpu=disabled"
    ++ lib.lists.optional (!es_kernel) "-Des_kernel=disabled"
+   ++ lib.lists.optional (!es_irq) "-Des_irq=disabled"
    ++ lib.lists.optional (!es_sched) "-Des_sched=disabled"
    ++ lib.lists.optional (!es_hwrand) "-Des_hwrand=disabled"
   ;
