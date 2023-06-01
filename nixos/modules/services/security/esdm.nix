@@ -105,7 +105,7 @@ in {
                 "esdm-server.service"
             ];
             serviceConfig = {
-                ExecStart = "${cfg.package}/bin/esdm-proc -d -f -o allow_other /proc/sys/kernel/random";
+                ExecStart = "${cfg.package}/bin/esdm-proc -f -o allow_other /proc/sys/kernel/random";
                 Restart = "on-failure";
                 RestartSec = "5s";
             };

@@ -12,6 +12,8 @@
 , es_irq ? true
 , es_sched ? true
 , es_hwrand ? true
+, hash_sha512 ? true
+, hash_sha3_512 ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -51,13 +53,14 @@ stdenv.mkDerivation rec {
    ++ lib.lists.optional (!es_irq) "-Des_irq=disabled"
    ++ lib.lists.optional (!es_sched) "-Des_sched=disabled"
    ++ lib.lists.optional (!es_hwrand) "-Des_hwrand=disabled"
+   ++ lib.lists.optional (!hash_sha512) "-Dhash_sha512=disabled"
+   ++ lib.lists.optional (!hash_sha3_512) "-Dhash_sha3_512=disabled"
   ;
 
   meta = with lib; {
     homepage = "https://www.chronox.de/esdm.html";
     description = "Entropy Source and DRNG Manager in user space";
     license = [licenses.gpl2Only licenses.bsd3];
-    maintainers = with maintainers; [ joachifm nequissimus ];
     platforms = platforms.all;
   };
 }
