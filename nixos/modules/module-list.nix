@@ -298,6 +298,7 @@
   ./security/sudo.nix
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
+  #./security/esdm.nix
   ./security/wrappers/default.nix
   ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
@@ -1126,6 +1127,7 @@
   ./services/security/vault-agent.nix
   ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
+  ./services/security/esdm.nix
   ./services/system/automatic-timezoned.nix
   ./services/system/cachix-agent/default.nix
   ./services/system/cachix-watch-store.nix
