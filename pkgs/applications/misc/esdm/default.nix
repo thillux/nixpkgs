@@ -21,19 +21,19 @@ stdenv.mkDerivation rec {
   version = "unstable-2023-04-05";
 
   src = fetchFromGitHub {
-    owner = "smuellerDD";
+    owner = "thillux";
     repo = "esdm";
-    rev = "dc098ab1385cb272f583ee1b27232aedc3bb1a5e";
-    sha256 = "sha256-CFlzfx+d4t9VTcFDjCbcdFP1WOQLLYcZ6qNJTtHwI5A=";
+    rev = "f4d26e0705c1fb5a28bfab3666046b4a506f8b41";
+    sha256 = "sha256-6dCKp/rpKDiU791gaEUUdS4i328YtHrOr9EyI2/QyKY=";
   };
 
-  patches = [
-  (fetchpatch {
-    name = "esdm-fix-size.patch";
-    url = "https://github.com/thillux/esdm/commit/668815d0eb30f0488e47a977f76db9095acff322.patch";
-    hash = "sha256-1w5pPk27o+ZseJ10hkod86TRrnkt5hy75oG1VhgczqI=";
-  })
-  ];
+  # patches = [
+  # (fetchpatch {
+  #   name = "esdm-fix-size.patch";
+  #   url = "https://github.com/thillux/esdm/commit/668815d0eb30f0488e47a977f76db9095acff322.patch";
+  #   hash = "sha256-1w5pPk27o+ZseJ10hkod86TRrnkt5hy75oG1VhgczqI=";
+  # })
+  # ];
   nativeBuildInputs = [ meson cmake pkgconfig ninja ];
   buildInputs = [ protobufc fuse3 jitterentropy libselinux ];
 

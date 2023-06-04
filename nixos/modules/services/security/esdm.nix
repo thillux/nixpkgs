@@ -12,8 +12,14 @@ in {
     options.services.esdm = {
         enable = mkEnableOption "esdm service";
 
-        package = lib.mkOption{
+        package = lib.mkOption {
+            type = types.package;
             default = pkgs.esdm;
+            defaultText = literalExpression "pkgs.esdm";
+            example = literalExpression "pkgs.esdm";
+            description = lib.mdDoc ''
+            The esdm package to use.
+            '';
         };
     };
 
