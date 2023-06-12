@@ -2,8 +2,8 @@
 , git, protobufc, pkgconfig, fuse3, meson, cmake, ninja
 , libselinux, jitterentropy
 , selinuxSupport ? false
-, drng_chacha20 ? true
-, ais2031Support ? true
+, drng_chacha20 ? false
+, ais2031Support ? false
 , linux-devfiles ? true
 , linux-getrandom ? true
 , es_jitterRng ? true
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thillux";
     repo = "esdm";
-    rev = "f4d26e0705c1fb5a28bfab3666046b4a506f8b41";
-    sha256 = "sha256-6dCKp/rpKDiU791gaEUUdS4i328YtHrOr9EyI2/QyKY=";
+    rev = "2e6a0796a70c7cea9694c9de357ea91f1c0daaa1";
+    sha256 = "sha256-AYU0eUNXalDUD0KbXMlDe8lp0fJhnvt1el4opaxN7X0=";
   };
 
   # patches = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Db_lto=false"
+    "-Doversample_es=false"
   ] ++ lib.lists.optional (!selinuxSupport) "-Dselinux=disabled"
    ++ lib.lists.optionals drng_chacha20 [
     "-Ddrng_hash_drbg=disabled"

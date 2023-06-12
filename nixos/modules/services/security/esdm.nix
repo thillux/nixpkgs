@@ -15,8 +15,8 @@ in {
         package = lib.mkOption {
             type = types.package;
             default = pkgs.esdm;
-            defaultText = literalExpression "pkgs.esdm";
-            example = literalExpression "pkgs.esdm";
+            defaultText = literalExpression "esdm";
+            example = literalExpression "esdm";
             description = lib.mdDoc ''
             The esdm package to use.
             '';
@@ -29,40 +29,40 @@ in {
             description = "Entropy Source and DRNG Manager Daemon";
 
             wantedBy = [ "basic.target" ];
-            before= [ "sysinit.target" ];
+            # before= [ "sysinit.target" ];
             after = [
                 "local-fs.target"
             ];
 
             serviceConfig = {
-                DeviceAllow = [
-                    "/dev/null rw"
-                    "/dev/hwrng r"
-                ];
-                DevicePolicy = "strict";
-                Restart = "on-failure";
+                # DeviceAllow = [
+                #     "/dev/null rw"
+                #     "/dev/hwrng r"
+                # ];
+                # DevicePolicy = "strict";
+                Restart = "always";
                 RestartSec = "5s";
-                ExecStart = "${cfg.package}/bin/esdm-server -f";
-                IPAddressDeny = "any";
-                LimitMEMLOCK = "0";
-                LockPersonality = "yes";
-                MemoryDenyWriteExecute = "yes";
-                MountFlags = "private";
-                NoNewPrivileges = "yes";
-                PrivateMounts = "yes";
-                PrivateNetwork = "yes";
-                PrivateTmp = "yes";
-                PrivateUsers = "no";
-                ProtectControlGroups = "yes";
-                ProtectHome = "yes";
-                ProtectKernelModules = "yes";
-                ProtectKernelTunables = "yes";
-                ProtectSystem = "strict";
-                ReadOnlyPaths = "-/";
-                RemoveIPC = "yes";
-                RestrictAddressFamilies = "";
-                RestrictRealtime = "yes";
-                UMask = "0077";
+                ExecStart = "${cfg.package}/bin/esdm-server -f -vvv -u root";
+                # IPAddressDeny = "any";
+                # LimitMEMLOCK = "0";
+                # LockPersonality = "yes";
+                # MemoryDenyWriteExecute = "yes";
+                # MountFlags = "private";
+                # NoNewPrivileges = "yes";
+                # PrivateMounts = "yes";
+                # PrivateNetwork = "yes";
+                # PrivateTmp = "yes"
+                # PrivateUsers = "no";
+                # ProtectControlGroups = "yes";
+                # ProtectHome = "yes";
+                # ProtectKernelModules = "yes";
+                # ProtectKernelTunables = "yes";
+                # ProtectSystem = "strict";
+                # ReadOnlyPaths = "-/";
+                # RemoveIPC = "yes";
+                # RestrictAddressFamilies = "";
+                # RestrictRealtime = "yes";
+                # UMask = "0077";
             };
         };
 
@@ -71,14 +71,14 @@ in {
 
             wantedBy = [ "basic.target" ];
             wants = [ "esdm-server.service" ];
-            before= [ "sysinit.target" ];
+            # before= [ "sysinit.target" ];
             after = [
                 "local-fs.target"
                 "esdm-server.service"
             ];
             serviceConfig = {
-                ExecStart = "${cfg.package}/bin/esdm-cuse-random -f";
-                Restart = "on-failure";
+                ExecStart = "${cfg.package}/bin/esdm-cuse-random -f -v 7";
+                Restart = "always";
                 RestartSec = "5s";
             };
         };
@@ -88,14 +88,14 @@ in {
 
             wantedBy = [ "basic.target" ];
             wants = [ "esdm-server.service" ];
-            before= [ "sysinit.target" ];
+            # before= [ "sysinit.target" ];
             after = [
                 "local-fs.target"
                 "esdm-server.service"
             ];
             serviceConfig = {
-                ExecStart = "${cfg.package}/bin/esdm-cuse-urandom -f";
-                Restart = "on-failure";
+                ExecStart = "${cfg.package}/bin/esdm-cuse-urandom -f -v 7";
+                Restart = "always";
                 RestartSec = "5s";
             };
         };
@@ -103,16 +103,16 @@ in {
         systemd.services."esdm-proc" = {
             description = "Entropy Source and DRNG Manager /proc/sys/kernel/random";
 
-            wantedBy = [ "basic.target" ];
+            # wantedBy = [ "basic.target" ];
             wants = [ "esdm-server.service" ];
-            before= [ "sysinit.target" ];
+            # before= [ "sysinit.target" ];
             after = [
                 "local-fs.target"
                 "esdm-server.service"
             ];
             serviceConfig = {
-                ExecStart = "${cfg.package}/bin/esdm-proc -f -o allow_other /proc/sys/kernel/random";
-                Restart = "on-failure";
+                ExecStart = "${cfg.package}/bin/esdm-proc -f -o allow_other -v 7 /proc/sys/kernel/random";
+                Restart = "always";
                 RestartSec = "5s";
             };
         };
