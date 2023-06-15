@@ -20333,6 +20333,10 @@ with pkgs;
 
   dhex = callPackage ../applications/editors/dhex { };
 
+  djent = callPackage ../applications/science/math/djent { };
+
+  djenrandom = callPackage ../applications/science/math/djenrandom { };
+
   double-conversion = callPackage ../development/libraries/double-conversion { };
 
   dclib = callPackage ../development/libraries/dclib { };
