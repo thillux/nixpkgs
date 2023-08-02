@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , pkg-config, autoreconfHook, perl, gperf, bison, flex
 , gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
+, esdm, protobufc
 , openresolv
 , systemd, pam
 , curl
@@ -19,17 +20,17 @@ stdenv.mkDerivation rec {
   version = "5.9.11"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchFromGitHub {
-    owner = "strongswan";
+    owner = "thillux";
     repo = "strongswan";
-    rev = version;
-    hash = "sha256-DjVmDUEEJnf5kaia1f+Yow9g4+l3itOmoXR8/vVSssU=";
+    rev = "esdm-source";
+    hash = "sha256-zifXbw5JEGf/JyBd/mNsOVZvT7ma8cDREQrN6JEeZdA=";
   };
 
   dontPatchELF = true;
 
   nativeBuildInputs = [ pkg-config autoreconfHook perl gperf bison flex ];
   buildInputs =
-    [ curl gmp python3 ldns unbound openssl pcsclite ]
+    [ curl gmp python3 ldns unbound openssl pcsclite esdm protobufc ]
     ++ lib.optionals enableTNC [ trousers sqlite libxml2 ]
     ++ lib.optionals stdenv.isLinux [ systemd.dev pam iptables ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
