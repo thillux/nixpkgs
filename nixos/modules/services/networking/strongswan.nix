@@ -32,7 +32,7 @@ let
       ${caConf}
     '';
 
-  strongswanConf = {setup, connections, ca, secretsFile, managePlugins, enabledPlugins}: toFile "strongswan.conf" ''
+  strongswanConf = {setup, connections, ca, secretsFile, managePlugins, enabledPlugins, additionalConfig}: pkgs.writeText "strongswan.conf" ''
     charon {
       ${optionalString managePlugins "load_modular = no"}
       ${optionalString managePlugins ("load = " + (concatStringsSep " " enabledPlugins))}
@@ -46,6 +46,8 @@ let
     starter {
       config_file = ${ipsecConf { inherit setup connections ca; }}
     }
+
+    ${concatStringsSep "\n" additionalConfig}
   '';
 
 in
@@ -135,6 +137,12 @@ in
         {option}`managePlugins` is true.
       '';
     };
+
+    additionalConfig = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = lib.mdDoc "";
+    };
   };
 
 
@@ -155,7 +163,7 @@ in
       path = with pkgs; [ kmod iproute2 iptables util-linux ]; # XXX Linux
       after = [ "network-online.target" ];
       environment = {
-        STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins; };
+        STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins additionalConfig; };
       };
       serviceConfig = {
         ExecStart  = "${pkgs.strongswan}/sbin/ipsec start --nofork";

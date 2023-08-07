@@ -8,6 +8,7 @@
 , meson
 , ninja
 , libselinux
+, openssl
 , jitterentropy
   # A more detailed explaination of the following meson build options can be found
   # in the source code of esdm.
@@ -36,22 +37,14 @@ stdenv.mkDerivation rec {
   version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "smuellerDD";
+    owner = "thillux";
     repo = "esdm";
-    rev = "v${version}";
-    sha256 = "sha256-swBKVb5gnND76w2ULT+5hR/jVOqxEe4TAB1gyaLKE9Q=";
+    rev = "openssl-provider-pr";
+    sha256 = "sha256-qTpUiFETh4qcp+MrHwLWWX/nJ5Enk8ISnY8gtNl9cV4=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "arm64.patch";
-      url = "https://github.com/smuellerDD/esdm/commit/86b93a0ddf684448aba152c8f1b3baf40a6d41c0.patch";
-      sha256 = "sha256-gjp13AEsDNj23fcGanAAn2KCbYKA0cphhf4mCxek9Yg=";
-    })
-  ];
-
   nativeBuildInputs = [ meson pkg-config ninja ];
-  buildInputs = [ protobufc fuse3 jitterentropy ]
+  buildInputs = [ protobufc fuse3 jitterentropy openssl ]
     ++ lib.optional selinux libselinux;
 
   mesonFlags = [
@@ -70,6 +63,7 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "selinux" selinux)
     (lib.mesonEnable "drng_hash_drbg" drngHashDrbg)
     (lib.mesonEnable "drng_chacha20" drngChaCha20)
+    (lib.mesonEnable "openssl-rand-provider" true)
   ];
 
   doCheck = true;

@@ -9,6 +9,7 @@
 , enableNetworkManager ? false, networkmanager
 , darwin
 , nixosTests
+, rsync
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
@@ -19,16 +20,19 @@ stdenv.mkDerivation rec {
   pname = "strongswan";
   version = "5.9.11"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
-  src = fetchFromGitHub {
-    owner = "thillux";
-    repo = "strongswan";
-    rev = "esdm-source";
-    hash = "sha256-zifXbw5JEGf/JyBd/mNsOVZvT7ma8cDREQrN6JEeZdA=";
-  };
+  # src = fetchFromGitHub {
+  #   owner = "thillux";
+  #   repo = "strongswan";
+  #   rev = "esdm-source";
+  #   hash = "sha256-wRu8jgcEsEX5EQa+f2RebWKDzkrcHpCJqJn3TiiRqg8=";
+  # };
+
+  src = /home/mtheil/Code/strongswan-tui-clean;
 
   dontPatchELF = true;
+  enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook perl gperf bison flex ];
+  nativeBuildInputs = [ pkg-config autoreconfHook perl gperf bison flex rsync ];
   buildInputs =
     [ curl gmp python3 ldns unbound openssl pcsclite esdm protobufc ]
     ++ lib.optionals enableTNC [ trousers sqlite libxml2 ]
@@ -60,7 +64,8 @@ stdenv.mkDerivation rec {
       "--enable-acert"
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
       "--enable-chapoly"
-      "--enable-curl" ]
+      "--enable-curl"
+      "--enable-esdm" ]
     ++ lib.optionals stdenv.isLinux [
       "--enable-farp" "--enable-dhcp"
       "--enable-systemd" "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
@@ -94,9 +99,14 @@ stdenv.mkDerivation rec {
       "--disable-scripts"
     ];
 
+  outputs = [ "out" "dev" ];
+
   postInstall = ''
     # this is needed for l2tp
     echo "include /etc/ipsec.secrets" >> $out/etc/ipsec.secrets
+
+    # install header files for external plugin development
+    rsync -avz --files-from=<(find ./ -name "*.h") ./ $dev/
   '';
 
   NIX_LDFLAGS = lib.optionalString stdenv.cc.isGNU "-lgcc_s" ;
