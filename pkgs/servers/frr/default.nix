@@ -31,7 +31,7 @@
 , nixosTests
 
 # general options
-, snmpSupport ? true
+, snmpSupport ? false
 , rpkiSupport ? true
 , numMultipath ? 64
 , watchfrrSupport ? true
