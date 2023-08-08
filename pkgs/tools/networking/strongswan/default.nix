@@ -20,14 +20,11 @@ stdenv.mkDerivation rec {
   pname = "strongswan";
   version = "5.9.11"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
-  # src = fetchFromGitHub {
-  #   owner = "thillux";
-  #   repo = "strongswan";
-  #   rev = "esdm-source";
-  #   hash = "sha256-wRu8jgcEsEX5EQa+f2RebWKDzkrcHpCJqJn3TiiRqg8=";
-  # };
-
-  src = /home/mtheil/Code/strongswan-tui-clean;
+  src = fetchGit {
+    url = "git@git.seven.secucloud.secunet.com:seven/heat/secunet/strongswan-zorb.git";
+    ref = "zorb-dev";
+    rev = "88998f404a918425b0d2d05e1e3f23a8677fee93";
+  };
 
   dontPatchELF = true;
   enableParallelBuilding = true;
