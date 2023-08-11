@@ -5,8 +5,6 @@
 , enableSSL2 ? false
 , enableSSL3 ? false
 , enableKTLS ? stdenv.isLinux
-# support for IP address range and ASN information in certificates, originates from S-BGP
-, enableRFC3779 ? true
 , static ? stdenv.hostPlatform.isStatic
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
@@ -131,7 +129,6 @@ let
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
-      ++ lib.optional enableRFC3779 "enable-rfc3779"
       # We select KTLS here instead of the configure-time detection (which we patch out).
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
       ++ lib.optional (lib.versionAtLeast version "3.0.0" && enableKTLS) "enable-ktls"
