@@ -1,0 +1,82 @@
+diff --git a/Makefile b/Makefile
+index efdf4d3..f56558f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -68,7 +68,7 @@ prof:
+ install: install_tools install_notify install_notify_dbus
+ 
+ install_tools: build_tools
+-	install -m 2775 -d $(DESTDIR)/sbin
++	install -d $(DESTDIR)/sbin
+ 	install $(BINDIR)/adhcp_dump $(DESTDIR)/sbin
+ 	install $(BINDIR)/adhcp_client $(DESTDIR)/sbin
+ 	install $(BINDIR)/adhcp_client6 $(DESTDIR)/sbin
+@@ -76,12 +76,12 @@ install_tools: build_tools
+ 	install $(BINDIR)/adhcp_relay $(DESTDIR)/sbin
+ 
+ install_notify: build_notify
+-	install -m 2775 -d $(DESTDIR)/sbin
++	install -d $(DESTDIR)/sbin
+ 	install $(BINDIR)/adhcp_notify_simple $(DESTDIR)/sbin
+ 	install $(BINDIR)/adhcp_notify6_isc_script $(DESTDIR)/sbin
+ 
+ install_notify_dbus: build_notify_dbus
+-	install -m 2775 -d $(DESTDIR)/sbin
++	install -d $(DESTDIR)/sbin
+ 	install $(BINDIR)/adhcp_notify_dbus $(DESTDIR)/sbin
+ 	install $(BINDIR)/adhcp_notify6_dbus $(DESTDIR)/sbin
+ 
+diff --git a/adhcp_notify_dbus.gpr b/adhcp_notify_dbus.gpr
+index 3f3aad1..2961d09 100644
+--- a/adhcp_notify_dbus.gpr
++++ b/adhcp_notify_dbus.gpr
+@@ -14,7 +14,7 @@
+ --  for more details.
+ --
+ 
+-with "dbus_ada";
++with "dbusada";
+ 
+ project Adhcp_Notify_Dbus extends "adhcp_notify_common" is
+ 
+diff --git a/src/dhcp-timing_events-start.ads b/src/dhcp-timing_events-start.ads
+index 924496d..ad62d6a 100644
+--- a/src/dhcp-timing_events-start.ads
++++ b/src/dhcp-timing_events-start.ads
+@@ -14,8 +14,6 @@
+ --  for more details.
+ --
+ 
+-with DHCP.Timing_Events;
+-
+ with DHCP.States;
+ 
+ package DHCP.Timing_Events.Start
+diff --git a/src/dhcp-timing_events-timer_expiry.ads b/src/dhcp-timing_events-timer_expiry.ads
+index 947b9f5..ad9d553 100644
+--- a/src/dhcp-timing_events-timer_expiry.ads
++++ b/src/dhcp-timing_events-timer_expiry.ads
+@@ -14,7 +14,6 @@
+ --  for more details.
+ --
+ 
+-with DHCP.Timing_Events;
+ with DHCP.Types;
+ with DHCP.States;
+ 
+diff --git a/src/v6/dhcpv6-states.ads b/src/v6/dhcpv6-states.ads
+index a3e097d..8c387a1 100644
+--- a/src/v6/dhcpv6-states.ads
++++ b/src/v6/dhcpv6-states.ads
+@@ -59,10 +59,7 @@ is
+    procedure Process_Message
+      (Transaction : in out Transaction_Type;
+       Msg         :        Message.Message_Type)
+-   is abstract
+-   with
+-      Pre'Class => Transaction_Type'Class
+-        (Transaction).Get_ID = Msg.Get_Transaction_ID;
++   is abstract;
+    --  Process DHCPv6 message.
+ 
+    procedure Set_Retransmission_Params

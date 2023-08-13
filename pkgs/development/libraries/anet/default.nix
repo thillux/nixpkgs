@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     gnat
   ];
 
+  preBuild = ''
+    sed -i "s/--project-subdir=lib\/gnat/--project-subdir=share\/gpr/g" Makefile
+  '';
+
   makeFlags = [
     "PREFIX="
     "DESTDIR=${placeholder "out"}"
