@@ -6998,6 +6998,8 @@ with pkgs;
 
   adhcp = callPackage ../tools/networking/adhcp { };
 
+  ada-dns = callPackage ../tools/networking/adns { };
+
   age = callPackage ../tools/security/age { };
 
   agebox = callPackage ../tools/security/agebox { };
