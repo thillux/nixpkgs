@@ -1,0 +1,31 @@
+diff --git a/Makefile b/Makefile
+index 4d61541..a84b89d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -68,11 +68,11 @@ cov: build_tests
+ install: install_resolved install_cli
+ 
+ install_resolved: build_resolved
+-	install -m 2775 -d $(DESTDIR)/sbin
++	install -d $(DESTDIR)/sbin
+ 	install $(BIN_DIR)/adns_resolved $(DESTDIR)/sbin
+ 
+ install_cli: build_cli
+-	install -m 2775 -d $(DESTDIR)/bin
++	install -d $(DESTDIR)/bin
+ 	install $(BIN_DIR)/adns_resolve_cli $(DESTDIR)/bin
+ 
+ build_fuzz:
+diff --git a/adns_resolved.gpr b/adns_resolved.gpr
+index 16f3247..4b0be7d 100644
+--- a/adns_resolved.gpr
++++ b/adns_resolved.gpr
+@@ -15,7 +15,7 @@
+ --  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ --
+ 
+-with "dbus_ada";
++with "dbusada";
+ with "adns_common";
+ with "adns_util";
+ 
