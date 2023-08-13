@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnat, gprbuild, glibc, anet, alog, dbus-ada }:
+{ stdenv, fetchurl, gnat, gprbuild, glibc, anet, alog, dbus-ada, glib, dbus-glib }:
 
 stdenv.mkDerivation rec {
   pname = "adhcp";
@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-i9/a0TcWDCJhWB5CPmnIS3ZI5xwOyd1g22kCthD07oE=";
   };
 
+  patches = [
+    ./timing.patch
+  ];
+
   nativeBuildInputs = [
     gprbuild
     gnat
@@ -17,6 +21,8 @@ stdenv.mkDerivation rec {
     alog
     anet
     dbus-ada
+    glib
+    dbus-glib
   ];
 
   dontConfigure = true;
