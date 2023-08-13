@@ -6996,6 +6996,8 @@ with pkgs;
     dual-function-keys = callPackage ../tools/inputmethods/interception-tools/dual-function-keys.nix { };
   };
 
+  adhcp = callPackage ../tools/networking/adhcp { };
+
   age = callPackage ../tools/security/age { };
 
   agebox = callPackage ../tools/security/agebox { };
@@ -17876,6 +17878,12 @@ with pkgs;
 
   h3 = h3_3;
 
+  amtk = callPackage ../development/libraries/amtk { };
+
+  anet = callPackage ../development/libraries/anet { };
+  alog = callPackage ../development/libraries/alog { };
+  dbus-ada = callPackage ../development/libraries/dbus-ada { };
+  
   avrlibc      = callPackage ../development/misc/avr/libc { };
   avrlibcCross = callPackage ../development/misc/avr/libc {
     stdenv = crossLibcStdenv;
