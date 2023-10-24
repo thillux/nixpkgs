@@ -1,0 +1,35 @@
+From cd94afaf9f2a3018efc9849ecd18e94fc4033120 Mon Sep 17 00:00:00 2001
+From: Markus Theil <theil.markus@gmail.com>
+Date: Wed, 25 Oct 2023 13:22:01 +0200
+Subject: [PATCH 3/3] fix mtcr.py
+
+Signed-off-by: Markus Theil <theil.markus@gmail.com>
+---
+ mtcr_py/mtcr.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mtcr_py/mtcr.py b/mtcr_py/mtcr.py
+index 8256fbb..7c7d80e 100644
+--- a/mtcr_py/mtcr.py
++++ b/mtcr_py/mtcr.py
+@@ -224,7 +224,7 @@ else:
+ 
+         ##########################
+         def read4(self, addr):
+-            cmd = ["mcra", self.dev, hex(addr)]
++            cmd = ["mstmcra", self.dev, hex(addr)]
+             rc, out = getstatusoutput(cmd)
+             if rc:
+                 raise MtcrException("Failed to read from mst device from address 0x%x: %s" % (addr, out))
+@@ -236,7 +236,7 @@ else:
+ 
+         ##########################
+         def write4(self, addr, val):
+-            cmd = ["mcra", self.dev, hex(addr), hex(val)]
++            cmd = ["mstmcra", self.dev, hex(addr), hex(val)]
+             rc, out = getstatusoutput(cmd)
+             if rc:
+                 raise MtcrException("Failed to wrtie to mst device to address 0x%x: %s" % (addr, out))
+-- 
+2.42.0
+

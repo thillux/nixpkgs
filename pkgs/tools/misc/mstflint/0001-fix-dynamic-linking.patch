@@ -1,0 +1,29 @@
+From 3b4fb5074a2fee024b33860841cdf0f3d1102bb0 Mon Sep 17 00:00:00 2001
+From: Markus Theil <theil.markus@gmail.com>
+Date: Mon, 23 Oct 2023 18:42:55 +0200
+Subject: [PATCH 1/3] fix dynamic linking
+
+Signed-off-by: Markus Theil <theil.markus@gmail.com>
+---
+ mlxlink/Makefile.am | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/mlxlink/Makefile.am b/mlxlink/Makefile.am
+index 9469b20..c10b4f4 100644
+--- a/mlxlink/Makefile.am
++++ b/mlxlink/Makefile.am
+@@ -68,9 +68,8 @@ mstlink_DEPENDENCIES = modules/libmodules_lib.a \
+                       $(LAYOUTS_DIR)/libtools_layouts.a \
+                       $(USER_DIR)/xz_utils/libxz_utils.a \
+                       $(USER_DIR)/ext_libs/minixz/libminixz.a \
+-                      -lboost_regex -lboost_filesystem -lboost_system \
+-                      -llzma $(LIBSTD_CPP) ${LDL} -lexpat \
++                      $(LIBSTD_CPP) \
+                       $(JSON_LIBS)
+ 
+-mstlink_LDADD = $(mstlink_DEPENDENCIES)
++mstlink_LDADD = $(mstlink_DEPENDENCIES) -lboost_regex -lboost_filesystem -lboost_system -llzma ${LDL} -lexpat
+ 
+-- 
+2.42.0
+
