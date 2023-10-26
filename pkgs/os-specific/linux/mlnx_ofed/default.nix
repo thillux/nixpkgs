@@ -62,6 +62,10 @@ stdenv.mkDerivation rec {
     "--with-mlxdevm-mod"
   ];
 
+  makeFlags = kernel.makeFlags ++ [
+    "V=1"
+  ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {

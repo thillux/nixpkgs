@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     zlib
     libxml2
     openssl
-  ] ++ lib.optional (!minimalBuild) [
-    boost.dev
-    curl.dev
-    expat.dev
-    xz.dev
+  ] ++ lib.optionals (!minimalBuild) [
+    boost
+    curl
+    expat
+    xz
     python3
   ];
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-xml2"
-  ] ++ lib.optional (!minimalBuild) [
+  ] ++ lib.optionals (!minimalBuild) [
     "--enable-dc"
     "--enable-adb-generic-tools"
     "--enable-fw-mgr"
