@@ -379,6 +379,8 @@ in {
 
     lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
 
+    mlnx_ofed = callPackage ../os-specific/linux/mlnx_ofed { };
+
     mstflint_access = callPackage ../os-specific/linux/mstflint_access { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta { };
