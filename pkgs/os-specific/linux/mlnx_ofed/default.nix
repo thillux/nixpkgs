@@ -22,44 +22,60 @@ stdenv.mkDerivation rec {
         ofed_scripts/configure \
         compat/config/parallel-build.m4 \
         compat/configure \
+        ofed_scripts/makefile \
       --replace "/bin/cp" "${coreutils}/bin/cp"
 
     substituteInPlace \
         ofed_scripts/configure \
         compat/config/parallel-build.m4 \
         compat/configure \
+        ofed_scripts/makefile \
       --replace "/bin/mv" "${coreutils}/bin/mv"
 
     substituteInPlace \
         ofed_scripts/configure \
         compat/config/parallel-build.m4 \
         compat/configure \
+        ofed_scripts/makefile \
       --replace "/bin/rm" "${coreutils}/bin/rm"
 
     substituteInPlace \
         ofed_scripts/configure \
         compat/config/parallel-build.m4 \
         compat/configure \
+        ofed_scripts/makefile \
       --replace "/bin/mkdir" "${coreutils}/bin/mkdir"
 
     substituteInPlace \
         ofed_scripts/configure \
         compat/config/parallel-build.m4 \
         compat/configure \
+        ofed_scripts/makefile \
       --replace "/bin/mktemp" "${coreutils}/bin/mktemp"
+    
+     substituteInPlace \
+        ofed_scripts/configure \
+        compat/config/parallel-build.m4 \
+        compat/configure \
+        ofed_scripts/makefile \
+      --replace "/bin/ls" "${coreutils}/bin/ls"
+    
+    echo $configureFlags
   '';
 
   configureFlags = [
-    "--kernel-version=${kernel.modDirVersion}"
-    "--kernel-sources=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
-    "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
-    "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "--modules-dir=$out/lib/modules/${kernel.modDirVersion}"
+    "--kernel-version ${kernel.modDirVersion}"
+    "--kernel-sources ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/source"
+    "--with-linux ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/source"
+    "--with-linux-obj ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "--modules-dir ${placeholder "out"}/lib/modules/${kernel.modDirVersion}/"
     "-j100" #$NIX_BUILD_CORES"
     "--with-core-mod"
     "--with-mlx5-mod"
     "--with-user_access-mod"
     "--with-mlxdevm-mod"
+    "--without-kernel-fixes"
+    "--without-backport-patches"
   ];
 
   makeFlags = kernel.makeFlags ++ [
