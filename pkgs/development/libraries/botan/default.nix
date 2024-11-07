@@ -68,6 +68,8 @@ let
         ++ lib.optionals static [ "static" ]
         ++ lib.optionals (!static) [ "shared" ];
 
+      CXXFLAGS="-fPIE";
+
       botanConfigureFlags =
         [
           "--prefix=${placeholder "out"}"
