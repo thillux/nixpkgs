@@ -58,7 +58,7 @@ let
             Security
           ]
         )
-        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
+        ++ lib.optionals (lib.versionAtLeast version "3.6.0" && stdenv.hostPlatform.isLinux) [
           jitterentropy
         ];
 
@@ -86,7 +86,7 @@ let
         ++ lib.optionals stdenv.hostPlatform.isAarch64 [
           "--cpu=aarch64"
         ]
-        ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
+        ++ lib.optionals (lib.versionAtLeast version "3.6.0" && stdenv.hostPlatform.isLinux) [
           "--enable-modules=jitter_rng"
         ];
 
