@@ -206,16 +206,16 @@ in
         linux_6_6 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "6.6";
           kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
+            # kernelPatches.bridge_stp_helper
+            # kernelPatches.request_key_helper
           ];
         };
 
         linux_rt_6_6 = callPackage ../os-specific/linux/kernel/linux-rt-6.6.nix {
           kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.export-rt-sched-migrate
+            #kernelPatches.bridge_stp_helper
+            #kernelPatches.request_key_helper
+            #kernelPatches.export-rt-sched-migrate
           ];
         };
 
