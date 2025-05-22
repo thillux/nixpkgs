@@ -20,16 +20,6 @@
   policy ? null,
 }:
 
-assert lib.assertOneOf "policy" policy [
-  # no explicit policy is given. The defaults by the library are used
-  null
-  # only allow BSI approved algorithms, FFI and SHAKE for XMSS
-  "bsi"
-  # only allow NIST approved algorithms in FIPS 140
-  "fips140"
-  # only allow "modern" algorithms
-  "modern"
-];
 
 let
   common =

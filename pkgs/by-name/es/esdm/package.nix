@@ -21,7 +21,7 @@
   selinux ? false, # enable selinux support
   drngHashDrbg ? true, # set the default drng callback
   drngChaCha20 ? false, # set the default drng callback
-  ais2031 ? false, # set the seeding strategy to be compliant with AIS 20/31
+  ais2031 ? true, # set the seeding strategy to be compliant with AIS 20/31
   sp80090c ? false, # set compliance with NIST SP800-90C
   cryptoBackend ? "builtin", # set backend for hash and drbg operations
   linuxDevFiles ? true, # enable linux /dev/random and /dev/urandom support
@@ -56,17 +56,22 @@
 
 assert drngHashDrbg != drngChaCha20;
 assert hashSha512 != hashSha3_512;
-assert cryptoBackend == "openssl" || cryptoBackend == "botan" || cryptoBackend == "builtin";
+assert lib.assertOneOf "cryptoBackend" cryptoBackend [
+  "builtin"
+  "openssl"
+  "botan"
+];
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "esdm";
-  version = "1.2.0";
+  version = "master";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "esdm";
-    rev = "v${version}";
-    hash = "sha256-5XctrI02pfCgK1P76AaSkMjiQqav6LX3SMjKr4F44sw=";
+    #rev = "v${finalAttrs.version}";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-JvKIfTDENe33aiEEskUPG0+J4ZDLPOaON+MWdq8Xvr0=";
   };
 
   nativeBuildInputs = [
@@ -86,12 +91,19 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ protobufc ];
 
   mesonFlags = [
-    (lib.mesonBool "b_lto" false)
+    # LTO works with the current versions > 1.2.0 also for C++
+    (lib.mesonBool "b_lto" true)
     (lib.mesonBool "fips140" false)
+    # support for NTG.1 as of BSI AIS 20/31 3.0
     (lib.mesonBool "ais2031" ais2031)
+    # support for NIST SP 800-90C Draft Standard
     (lib.mesonBool "sp80090c" sp80090c)
-    (lib.mesonEnable "node" true) # multiple DRNGs
-    (lib.mesonOption "threading_max_threads" (toString 64))
+    # multiple DRNGs in the server
+    (lib.mesonEnable "node" true)
+    # use rather large number here in order to work properly on many-core systems
+    # ESDM uses a thread per RPC connection (multiple per thread, as per-core connections
+    # are implemented in the RPC library)
+    (lib.mesonOption "threading_max_threads" (toString 1024))
     (lib.mesonOption "crypto_backend" cryptoBackend)
     (lib.mesonEnable "linux-devfiles" linuxDevFiles)
     (lib.mesonEnable "linux-getrandom" linuxGetRandom)
@@ -125,6 +137,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   mesonBuildType = "release";
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://www.chronox.de/esdm.html";
@@ -139,4 +152,4 @@ stdenv.mkDerivation rec {
       thillux
     ];
   };
-}
+})
