@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jitterentropy";
-  version = "3.6.3";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
-    owner = "smuellerDD";
+    owner = "thillux";
     repo = "jitterentropy-library";
-    rev = "v${version}";
-    hash = "sha256-A7a0kg9JRiNNKJbLJu5Fbu6ZgCwv3+3oDhZr3jwNXmM=";
+    rev = "mtheil/ntg1-fixes";
+    hash = "sha256-R+e7KZ53WfiXTI/m+OsLrbJIUohloxTs4OAdOk/vIHs=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
+
+  postInstall = ''
+    mkdir -p $out/tests
+    find $NIX_BUILD_TOP/${src.name}/tests/raw-entropy/recording_userspace -name "*.sh" -exec cp {} $out/tests \;
+    find $NIX_BUILD_TOP/${src.name}/tests/raw-entropy/validation-runtime -name "*.sh" -exec cp {} $out/tests \;
+  '';
 
   hardeningDisable = [ "fortify" ]; # avoid warnings
 
