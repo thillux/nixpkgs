@@ -1,0 +1,16 @@
+[project]
+name = "botan3"
+version = "3.8.1"
+description = "Python bindings for Botan C++ crypto library"
+license = "BSD-2-Clause"
+requires-python = ">=3.2"
+
+[build-system]
+requires = [ "setuptools" ]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["botan3"]
+
+[tool.setuptools.package-dir]
+"" = "src/python"
