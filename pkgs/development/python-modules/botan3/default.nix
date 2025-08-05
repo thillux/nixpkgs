@@ -2,28 +2,39 @@
   lib,
   buildPythonPackage,
 
+  fetchurl,
+
   # dependencies
   botan3,
 
   # build dependencies
   setuptools,
+  setuptools-scm,
 }:
 
+let
+  my-botan3 = botan3.overrideAttrs {
+    src = fetchurl {
+      url = "https://github.com/thillux/botan/archive/refs/heads/mtheil/python-definitions.tar.gz";
+      hash = "sha256-+TzrU28fTi1/sKFTL42aJWkGRGtZtNiDdtcuQlTqrVY=";
+    };
+  };
+in
 buildPythonPackage rec {
   pname = "botan3";
-  inherit (botan3) src version;
+  inherit (my-botan3) src version;
   format = "pyproject";
 
-  propagatedBuildInputs = [ botan3 ];
-  nativeBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [ my-botan3 ];
+  nativeBuildInputs = [ setuptools setuptools-scm ];
 
   postPatch = ''
-    botanLibPath=$(find ${botan3.out}/lib -name 'libbotan-3.so' | head -n1)
-    substituteInPlace src/python/botan3.py \
+    botanLibPath=$(find ${my-botan3.out}/lib -name 'libbotan-3.so' | head -n1)
+    substituteInPlace botan3.py \
       --replace 'libbotan-3.so' "$botanLibPath"
-
-    cp ${./pyproject.toml} pyproject.toml
   '';
+
+  sourceRoot = "botan-mtheil-python-definitions/src/python";
 
   pythonImportsCheck = [ "botan3" ];
 
