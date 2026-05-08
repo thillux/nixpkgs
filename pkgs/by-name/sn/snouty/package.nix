@@ -41,6 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh $releaseDir/build/snouty-*/out/_snouty
   '';
 
+  useNextest = true;
+
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     podman
