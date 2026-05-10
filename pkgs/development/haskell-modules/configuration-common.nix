@@ -3359,6 +3359,14 @@ with haskellLib;
       sha256 = "sha256-yC+GJDNO58TIc197Mgn/vqpt4fY3YghLhJfmGkQjsxk=";
     } super.botan-low
   );
+
+  # 2026-05-10: Remove again, when hackage bump is recent enough
+  botan-bindings = warnAfterVersion "0.3.0.0" (
+    overrideCabal {
+      version = "0.3.0.0";
+      sha256 = "sha256-tsarIc3LcUKPgSWZ+xcGPWGO2f9OF6SWHB6nmX/vJYw=";
+    } super.botan-bindings
+  );
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
