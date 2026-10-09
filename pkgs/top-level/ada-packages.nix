@@ -14,6 +14,8 @@ makeScopeWithSplicing' {
     self: {
       inherit gnat;
 
+      alog = self.callPackage ../development/ada-modules/alog { };
+
       anet = self.callPackage ../development/ada-modules/anet { };
 
       gpr2 = self.callPackage ../development/ada-modules/gpr2 { };
