@@ -242,8 +242,10 @@ let
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
 
-    # Ada options, gcc can't build the runtime library for a cross compiler
-    ++ lib.optional langAda (if hostIsTarget then "--enable-libada" else "--disable-libada")
+    # Ada options, gcc can't build the runtime library without a target libc.
+    # A cross compiler needs the runtime to be usable, e.g. as the host
+    # compiler when cross-compiling GNAT itself.
+    ++ lib.optional langAda (lib.enableFeature (!withoutTargetLibc) "libada")
 
     ++ import ../common/platform-flags.nix {
       inherit (stdenv) targetPlatform;

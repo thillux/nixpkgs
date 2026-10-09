@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   version,
   buildPlatform,
   hostPlatform,
@@ -28,6 +29,13 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 ''
 + lib.optionalString langAda ''
   export PATH=${gnat-bootstrap}/bin:$PATH
+''
+# For a cross-built GNAT, gnat-bootstrap is a cross compiler emitting code
+# for the hostPlatform. The generator tools built during the build run on
+# the buildPlatform and need a native GNAT as well. Append it, so that it
+# does not shadow the C compilers of stdenv.
++ lib.optionalString (langAda && !buildIsHost) ''
+  export PATH=$PATH:${buildPackages.buildPackages."gnat${lib.versions.major version}"}/bin
 ''
 
 # For a cross-built native compiler, i.e. build!=(host==target), the

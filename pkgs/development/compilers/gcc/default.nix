@@ -302,6 +302,22 @@ pipe
            '-s' # workaround for hitting hydra log limit
            'LIMITS_H_TEST=false'
         )
+      ''
+      # When cross-compiling, the gnat tools are linked by gnatlink of the
+      # bootstrap GNAT with --LINK="$(CXX) ...". A relative linker name is
+      # resolved next to gnatlink first, i.e. to the unwrapped g++, which
+      # cannot find the libc startfiles. Use the absolute (wrapped) path.
+      + optionalString (langAda && !(buildIsHost && hostIsTarget)) ''
+        substituteInPlace gcc/ada/gcc-interface/Makefile.in \
+          --replace-fail 'GCC_LINK=$(CXX) ' 'GCC_LINK=$(shell command -v $(CXX)) '
+      ''
+      # gnat-cflags-11.patch adds CFLAGS_FOR_TARGET to the flags used to
+      # link the gnat tools. A cross compiler links them for the host with
+      # the host compiler, so the target libc flags must not end up there.
+      + optionalString (langAda && !hostIsTarget) ''
+        substituteInPlace gcc/ada/gcc-interface/Makefile.in \
+          --replace-fail 'GCC_LINK_FLAGS=-static-libstdc++ -static-libgcc $(CFLAGS_FOR_TARGET)' \
+                         'GCC_LINK_FLAGS=-static-libstdc++ -static-libgcc'
       '';
 
       inherit
