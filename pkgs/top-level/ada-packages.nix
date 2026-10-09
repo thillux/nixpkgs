@@ -18,6 +18,8 @@ makeScopeWithSplicing' {
 
       anet = self.callPackage ../development/ada-modules/anet { };
 
+      dbus-ada = self.callPackage ../development/ada-modules/dbus-ada { };
+
       gpr2 = self.callPackage ../development/ada-modules/gpr2 { };
 
       gprbuild-boot = self.callPackage ../development/ada-modules/gprbuild/boot.nix { };
