@@ -101,6 +101,20 @@ stdenv.mkDerivation {
         --unset GIO_EXTRA_MODULES
     done
 
+    # The knowledge base embedded in the Ada Language Server expects the Ada
+    # runtime relative to gnatls in PATH, which does not hold for the wrapped
+    # GNAT of nixpkgs. Make the unwrapped GNAT, whose prefix gnatls reports,
+    # visible to the language server only, as it does not build anything.
+    als=$out/opt/gnatstudio/libexec/gnatstudio/als/ada_language_server
+    wrapProgram $als --run '
+      while read -r dir; do
+        if [[ $dir =~ ^(/.+)/lib/gcc(-lib)?/[^/]+/[^/]+/adainclude/?$ ]]; then
+          PATH=$PATH:''${BASH_REMATCH[1]}/bin
+          break
+        fi
+      done < <(gnatls -v 2>/dev/null)
+    '
+
     install -Dm644 share/gnatstudio/icons/hicolor/32x32/apps/gnatstudio_logo.png \
       $out/share/icons/hicolor/32x32/apps/gnatstudio.png
 
